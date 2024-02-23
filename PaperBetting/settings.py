@@ -136,6 +136,6 @@ CELERY_RESULT_BACKEND = "redis://redis:6379"
 CELERY_BEAT_SCHEDULE = {
     "sample_task": {
         "task": "app.tasks.update_events_and_lines",
-        "schedule": crontab(minute="*/1"),
+        "schedule": crontab(minute=0, hour='*/3'),
     },
 }

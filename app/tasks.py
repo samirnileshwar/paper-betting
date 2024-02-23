@@ -7057,15 +7057,15 @@ def update_events_and_lines():
     res = _getObject()
 
     for event in res:
-        id = event['id']
+        key = event['id']
         sport_key = event['sport_key']
         sport_title = event['sport_title']
         start_time = event['commence_time']
         home_team = event['home_team']
         away_team = event['away_team']
         logger.info("update_events_and_lines event %s parsing" % id)
-        Event.objects.get_or_create(
-            event_key = id,
+        eventObj, created = Event.objects.get_or_create(
+            event_key = key,
             defaults = {
                 'sport_key': sport_key,
                 'sport_title': sport_title,
@@ -7074,5 +7074,30 @@ def update_events_and_lines():
                 'start_time': start_time
             }
         )
+        
+        #Go through each type of bet
+        try:
+            markets = event['bookmakers'][0]['markets']
+        except:
+            logger.info("No markets found for Event %s" % id)
+        
+        for market in markets:
+            for outcome in market['outcomes']:
+                line_type = market['key']
+                name = outcome['name']
+                price = outcome['price']
+                point = outcome.get('point', None)
+                updated = market['last_update']
+
+                Line.objects.update_or_create(
+                    event = eventObj,
+                    line_type = line_type,
+                    name = name,
+                    defaults = {
+                        'price': price,
+                        'point': point,
+                        'updated': updated
+                    }
+                )
         
     logger.info("update_events_and_lines task finished")
