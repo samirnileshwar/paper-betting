@@ -13,6 +13,7 @@ services:
       - ./.env
     depends_on:
       - db
+      - redis
     
   db:
     image: postgres:15
@@ -24,6 +25,33 @@ services:
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
     ports:
       - 5432:5432
+
+  redis:
+    image: redis:alpine
+
+  celery:
+    build: ./
+    command: celery -A PaperBetting worker -l info
+    volumes:
+      - ./:/usr/src/app/
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=${SECRET_KEY}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+    depends_on:
+      - redis
+
+  celery-beat:
+    build: ./
+    command: celery -A PaperBetting beat -l info
+    volumes:
+      - ./:/usr/src/app/
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=${SECRET_KEY}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+    depends_on:
+      - redis
 
 volumes:
   postgres_data:

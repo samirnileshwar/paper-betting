@@ -6,7 +6,7 @@ class User(models.Model):
     balance = models.DecimalField(max_digits=20, decimal_places=2)
 
 class Event(models.Model):
-    event_key = models.CharField(max_length=50)
+    event_key = models.CharField(max_length=50, unique=True)
     sport_key = models.CharField(max_length=50)
     sport_title = models.CharField(max_length=50)
     home_team = models.CharField(max_length=50)
