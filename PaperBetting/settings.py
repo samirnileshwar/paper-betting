@@ -41,9 +41,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "corsheaders",
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -54,6 +64,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "PaperBetting.urls"
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000'
+]
 
 TEMPLATES = [
     {
@@ -134,8 +148,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "app.tasks.update_events_and_lines",
+    "sync_events_and_lines": {
+        "task": "app.tasks.sync_events_and_lines",
         "schedule": crontab(minute=0, hour='*/3'),
     },
 }

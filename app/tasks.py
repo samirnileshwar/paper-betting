@@ -7051,7 +7051,7 @@ def _getObject():
 ]
 
 @shared_task
-def update_events_and_lines():
+def sync_events_and_lines():
     from .models import Event, Line
     logger.info("update_events_and_lines task starting")
     res = _getObject()
