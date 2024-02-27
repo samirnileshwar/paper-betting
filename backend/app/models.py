@@ -14,7 +14,7 @@ class Event(models.Model):
     start_time = models.DateTimeField()
     home_team_score = models.IntegerField(null=True)
     away_team_score = models.IntegerField(null=True)
-    complete = models.BooleanField(null=True)
+    complete = models.BooleanField(default=False)
 
 class Line(models.Model):
 

@@ -9,8 +9,12 @@ urlpatterns = [
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
 
     #Events
-    path('event/<int:pk>/', views.DetailEvent.as_view()),
+    path('events/<int:pk>/', views.DetailEvent.as_view()),
 
     #Lines
-    path('event/<int:event>/lines/', views.DetailEventLines.as_view()),
+    path('events/<int:event>/lines/', views.DetailEventLines.as_view()),
+
+    #Returns all open events and the lines to bet on
+    path('events/live/lines/', views.DetailEventLiveLines.as_view()),
+
 ]

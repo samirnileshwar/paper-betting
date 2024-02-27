@@ -161,5 +161,6 @@ CELERY_BEAT_SCHEDULE = {
     "sync_events_and_lines": {
         "task": "app.tasks.sync_events_and_lines",
         "schedule": crontab(minute=0, hour='*/3'),
+        #"schedule": crontab(minute='*/1'),
     },
 }
