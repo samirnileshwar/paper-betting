@@ -22,6 +22,8 @@ class EventLinesSerializer(serializers.HyperlinkedModelSerializer):
             'pk',
             'sport_title',
             'start_time',
+            'home_team',
+            'away_team',
             'line_set'
         ]
 
