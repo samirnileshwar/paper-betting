@@ -12,6 +12,10 @@ COPY frontend/package.json ./
 COPY frontend/package-lock.json ./
 RUN npm install --silent
 RUN npm install react-scripts@3.4.1 -g --silent
+RUN npm install react-router-dom --save
+RUN npm install bootstrap
+RUN npm install axios
+RUN npm install react-bootstrap-validation --save
 
 # add app
 COPY ./frontend ./
