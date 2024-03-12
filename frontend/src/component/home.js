@@ -1,6 +1,8 @@
 // Import the react JS packages
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Lines} from "./lines"
+
 // Define the Login function.
 export const Home = () => {
      const [message, setMessage] = useState('');
@@ -23,8 +25,7 @@ export const Home = () => {
           }
          })()};
      }, []);
-     return 
-        <div className="form-signin mt-5 text-center">
-          <h3>Hi {message}</h3>
-        </div>
+     return (
+        <Lines/>
+     )
 }

@@ -32,22 +32,16 @@ class Line(models.Model):
 
 class Bet(models.Model):
 
-    price = models.DecimalField(max_digits=20, decimal_places=2)
-    wager = models.DecimalField(max_digits=20, decimal_places=2)
-    toWin = models.DecimalField(max_digits=20, decimal_places=2)
-    result = models.BooleanField(null=True)
-
-class BetItem(models.Model):
-
     class LineTypes(models.TextChoices):
         H2H = 'h2h'
         SPREADS = 'spreads'
         TOTALS = 'totals'
 
-    bet_id = models.ForeignKey(Bet, on_delete=models.CASCADE)
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     line_type = models.CharField(max_length = 10, choices = LineTypes.choices)
     team_name = models.CharField(max_length=50, null = True)
     price = models.DecimalField(max_digits=20, decimal_places=2)
     point = models.DecimalField(max_digits=10, decimal_places=1, null = True)
-    result = models.BooleanField(null=True)
+    wager = models.DecimalField(max_digits=10, decimal_places=1, null = True)
+    toWin = models.DecimalField(max_digits=10, decimal_places=1, null = True)
+    settled = models.BooleanField(null=True, default=False)

@@ -1,6 +1,6 @@
 # todos/serializers.py
 from rest_framework import serializers
-from .models import Event, Line
+from .models import Event, Line, Bet
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -30,3 +30,9 @@ class EventLinesSerializer(serializers.HyperlinkedModelSerializer):
     def get_line_set(self, instance):
         lines = instance.line_set.all().order_by('pk')
         return LineSerializer(lines, many=True).data
+
+class BetSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        fields = ('event_id', 'line_type', 'team_name', 'point', 'price', 'wager', 'toWin', 'settled')
+        model = Bet

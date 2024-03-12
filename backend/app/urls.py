@@ -17,6 +17,8 @@ urlpatterns = [
     path('events/<int:event>/lines/', views.DetailEventLines.as_view()),
 
     #Returns all open events and the lines to bet on
-    path('events/live/lines/', views.DetailEventLiveLines.as_view()),
+    path('events/live/lines/', views.DetailEventLines.as_view()),
 
+    #Bets
+    path('bet/', views.DetailBets.as_view())
 ]

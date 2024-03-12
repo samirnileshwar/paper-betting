@@ -16,6 +16,7 @@ RUN npm install react-router-dom --save
 RUN npm install bootstrap
 RUN npm install axios
 RUN npm install react-bootstrap-validation --save
+RUN npm install react-bootstrap bootstrap
 
 # add app
 COPY ./frontend ./

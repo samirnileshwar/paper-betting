@@ -1,7 +1,6 @@
-import "./App.css";
 import React, { useState, useEffect } from "react";
 
-function App() {
+export const Lines = () => {
   const url = "http://127.0.0.1:8000/api/events/live/lines/";
   const [data, setData] = useState([]);
 
@@ -10,7 +9,6 @@ function App() {
       .then((res) => res.json())
       .then((d) => setData(d))
   }
-
 
   useEffect(() => {
     fetchInfo();
@@ -44,5 +42,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

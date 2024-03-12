@@ -3,8 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import generics
 
-from .models import Event, Line
-from .serializers import EventSerializer, LineSerializer, EventLinesSerializer
+from .models import Event, Line, Bet
+from .serializers import EventSerializer, LineSerializer, EventLinesSerializer, BetSerializer
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.views import APIView
@@ -46,19 +46,10 @@ class DetailEventLines(generics.ListAPIView):
     def get_queryset(self):
         return Line.objects.filter(event=self.kwargs['event'])
 
-class DetailEventLiveLines(generics.ListAPIView):
+class DetailBets(generics.ListCreateAPIView):
+    queryset = Bet.objects.all()
+    serializer_class = BetSerializer
     permission_classes = ()
-    lookup_field = 'event' 
-    serializer_class = EventLinesSerializer
 
     def get_queryset(self):
-        return Event.objects.filter(complete=False)
-'''    
-class DetailMakeBet(generics.APIView):
-    permission_classes = ()
-    lookup_field = 'event' 
-    serializer_class = EventLinesSerializer
-
-    def get_queryset(self):
-        return Event.objects.filter(complete=False)
-'''
+        return Bet.objects.all()
