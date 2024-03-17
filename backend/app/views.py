@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+from django.forms import ValidationError
+from decimal import Decimal
 # Create your views here.
 from rest_framework import generics
 
@@ -53,3 +54,38 @@ class DetailBets(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Bet.objects.all()
+    
+    def perform_create(self, serializer):
+
+        #Logic to verify that the price and point hasn't changed in the request
+        expectedLine= Line.objects.get(event = self.request.data['event_id'], 
+                                        line_type = self.request.data['line_type'],
+                                        name = self.request.data['team_name'])
+        
+        errors = {}
+        
+        #Verify the price all the time
+        if float(expectedLine.price) != float(self.request.data['price']):
+            errors['priceError'] = 'Price of bet ({0}) does not match given line ({1}). The line may have shifted.'.format(float(self.request.data['price']), expectedLine.price)
+        #Verify the point if spread or total
+        if self.request.data['line_type'] in ('spreads', 'totals') and float(expectedLine.point) != float(self.request.data['point']):
+            errors['pointError'] = 'Point of bet ({0}) does not match given line ({1}). The line may have shifted.'.format(float(self.request.data['point']), expectedLine.point)
+        
+        if errors:
+            raise ValidationError(errors)
+        
+        #toWin
+        toWin = float(self.request.data['wager']) * float(expectedLine.price)
+
+        if self.request.data['line_type'] in ('h2h'):
+            point = None
+        else:
+            point = self.request.data['point']
+            
+        serializer.save(event_id=Event.objects.get(id = self.request.data['event_id']), 
+                        line_type=self.request.data['line_type'],
+                        team_name=self.request.data['team_name'],
+                        wager=self.request.data['wager'],
+                        point = point,
+                        price = self.request.data['price'],
+                        toWin = toWin)

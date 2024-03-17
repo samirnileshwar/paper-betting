@@ -16,6 +16,9 @@ class Event(models.Model):
     away_team_score = models.IntegerField(null=True)
     complete = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.away_team + ' vs ' + self.home_team 
+
 class Line(models.Model):
 
     class LineTypes(models.TextChoices):
