@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from django.forms import ValidationError
+from .exceptions import LineChangeException
 from decimal import Decimal
 # Create your views here.
 from rest_framework import generics
 
 from .models import Event, Line, Bet
-from .serializers import EventSerializer, LineSerializer, EventLinesSerializer, BetSerializer
+from .serializers import EventSerializer, LineSerializer, BetSerializer
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.views import APIView
@@ -61,18 +61,13 @@ class DetailBets(generics.ListCreateAPIView):
         expectedLine= Line.objects.get(event = self.request.data['event_id'], 
                                         line_type = self.request.data['line_type'],
                                         name = self.request.data['team_name'])
-        
-        errors = {}
-        
+                
         #Verify the price all the time
         if float(expectedLine.price) != float(self.request.data['price']):
-            errors['priceError'] = 'Price of bet ({0}) does not match given line ({1}). The line may have shifted.'.format(float(self.request.data['price']), expectedLine.price)
+            raise LineChangeException()
         #Verify the point if spread or total
         if self.request.data['line_type'] in ('spreads', 'totals') and float(expectedLine.point) != float(self.request.data['point']):
-            errors['pointError'] = 'Point of bet ({0}) does not match given line ({1}). The line may have shifted.'.format(float(self.request.data['point']), expectedLine.point)
-        
-        if errors:
-            raise ValidationError(errors)
+            raise LineChangeException()
         
         #toWin
         toWin = float(self.request.data['wager']) * float(expectedLine.price)
