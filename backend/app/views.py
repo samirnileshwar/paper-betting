@@ -47,7 +47,7 @@ class DetailEventLines(generics.ListAPIView):
     def get_queryset(self):
         return Line.objects.filter(event=self.kwargs['event'])
 
-class DetailBets(generics.ListCreateAPIView):
+class Bets(generics.ListCreateAPIView):
     queryset = Bet.objects.all()
     serializer_class = BetSerializer
     permission_classes = ()

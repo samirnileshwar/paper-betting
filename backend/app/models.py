@@ -1,9 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class User(models.Model):
-    name = models.CharField(max_length=100)
-    balance = models.DecimalField(max_digits=20, decimal_places=2)
+class User(AbstractUser):
+    name = models.CharField(max_length=50)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default = 0)
 
 class Event(models.Model):
     event_key = models.CharField(max_length=50, unique=True)

@@ -20,5 +20,5 @@ urlpatterns = [
     path('events/live/lines/', views.DetailEventLines.as_view()),
 
     #Bets
-    path('bet/', views.DetailBets.as_view())
+    path('bet/', views.Bets.as_view())
 ]
